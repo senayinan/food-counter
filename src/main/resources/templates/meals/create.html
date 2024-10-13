@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Create Meal</title>
+</head>
+<body>
+<h1>Create Meal</h1>
+<form method="post" action="/meals/create">
+    <label for="mealType">Meal Type:</label>
+    <select name="mealType" id="mealType">
+        <option value="BREAKFAST">Breakfast</option>
+        <option value="LUNCH">Lunch</option>
+        <option value="DINNER">Dinner</option>
+        <option value="SNACK1">Snack1</option>
+        <option value="SNACK2">Snack2</option>
+        <option value="SNACK3">Snack3</option>
+    </select>
+    <input type="submit"    value="Create Meal">
+</form>
+
+</body>
+</html>

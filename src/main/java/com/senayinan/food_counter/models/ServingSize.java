@@ -1,4 +1,4 @@
-package com.senayinan.food_counter.model;
+package com.senayinan.food_counter.models;
 
 public enum ServingSize {
     CUP("Cup"),

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Delete Meal</title>
+</head>
+<body>
+<h1>Delete Meal</h1>
+<p>Are you sure you want to delete the meal: <strong th:text="${meal.mealType}"></strong>?</p>
+<form method="post" th:action="@{/meals/delete/{id}(id=${meal.id})}">
+    <div>
+        <input type="submit" value="Yes, Delete">
+    </div>
+</form>
+
+<a th:href="@{/meals}">Cancel</a>
+
+</body>
+</html>
