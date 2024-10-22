@@ -1,19 +1,29 @@
 package com.senayinan.food_counter.models;
 
-public class Food {
-    private final String Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.util.Objects;
+
+@Entity
+public class Food extends AbstractEntity{
+    @Size(min=3, max=50, message = "Name must be between 3 and 50 characters!")
+    @NotBlank(message = "Name is required!")
     private String name;
+    @NotNull(message = "Food type is required!")
     private FoodType foodType;
 
-    public Food(String id, String name, FoodType foodType) {
-        Id = id;
+    public Food(String name, FoodType foodType) {
         this.name = name;
         this.foodType = foodType;
     }
 
-    public String getId() {
-        return Id;
-    }
+    public Food() {}
+
 
     public String getName() {
         return name;
@@ -34,9 +44,9 @@ public class Food {
     @Override
     public String toString() {
         return "Food{" +
-                "Id='" + Id + '\'' +
                 ", name='" + name + '\'' +
                 ", foodType=" + foodType +
                 '}';
     }
+
 }

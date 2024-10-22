@@ -10,13 +10,13 @@ public enum FoodType {
     PROTEIN("Protein"),
     OTHER("OTHER");
 
-    private final String typeOfFood;
+   private final String displayName;
 
-    FoodType(String foodType) {
-        this.typeOfFood = foodType;
+    FoodType(String displayName) {
+        this.displayName = displayName;
     }
 
-    public String getFoodType() {
-        return typeOfFood;
+    public String getDisplayName() {
+        return displayName;
     }
 }

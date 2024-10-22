@@ -2,24 +2,19 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8"/>
-    <title>All Meals</title>
+    <title>Meals</title>
 </head>
 <body>
-<h1>All Meals</h1>
-<ul>
-    <li th:each="meal : ${meals}">
-        <span th:text="${meal.mealType}">Meal Type</span>:
-        <span th:text="${meal.getTotalCalories()}">Calories</span> kcal,
-        <span th:text="${meal.getTotalCarbs()}">Carbs</span> g
-            <ul>
-                <li th:each="foodItem : ${meal.foodItems}">
-                    <span th:text="${foodItem.name}">Food Item</span>
-                    <span th:text="${foodItem.getCalories}">Calories</span> kcal
-                    <span th:text="${foodItem.getCarbs}">Carbs</span> g
-                </li>
-            </ul>
-    </li>
-</ul>
+<div th:replace="fragments/fragment :: content">
+    <div th:fragment="content">
+        <h2>Meal List</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Meal Type</th>
+                <th>
+
+
 
 </body>
 </html>

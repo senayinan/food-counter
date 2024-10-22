@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">My Food Counter App</title>
+
+
+    <!-- Add CSS or JS resources here -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a th:href="@{/users}">Users</a></li>
+            <li><a th:href="@{/meals}">Meals</a></li>
+            <li><a th:href="@{/foods}">Foods</a></li>
+            <li><a th:href="@{/fooditems}">Food Items</a></li>
+            <li><a th:href="@{/days}">Days</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Page Header -->
+    <header>
+        <h1 th:text="${title}">Welcome</h1>
+    </header>
+
+
+
+    <!-- Main Content -->
+    <div id="content">
+        <div th:insert="${pageContent}"></div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 My App</p>
+    </footer>
+
+
+</body>
+</html>
