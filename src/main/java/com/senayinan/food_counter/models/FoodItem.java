@@ -1,17 +1,31 @@
 package com.senayinan.food_counter.models;
 
-public class FoodItem {
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+@Entity
+public class FoodItem extends AbstractEntity{
+
+    @Size(min=3, max=50, message = "Name must be between 3 and 50 characters!")
+    @NotBlank(message = "Name is required!")
     private String name;
+    @NotNull(message = "Quantity is required!")
+    private double quantity;
+    @NotNull(message = "Food type is required!")
     private FoodType foodType;
-    private String apiId;
+    @NotNull(message = "Serving size is required!")
     private ServingSize servingSize;
 
-    public FoodItem(String name, FoodType foodType, String apiId, ServingSize servingSize) {
+    public FoodItem(String name, double quantity, ServingSize servingSize, FoodType foodType) {
         this.name = name;
-        this.foodType = foodType;
-        this.apiId = apiId;
+        this.quantity = quantity;
         this.servingSize = servingSize;
+        this.foodType = foodType;
     }
+
+    public FoodItem() {}
 
     public String getName() {
         return name;
@@ -21,12 +35,12 @@ public class FoodItem {
         this.name = name;
     }
 
-    public FoodType getFoodType() {
-        return foodType;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setFoodType(FoodType foodType) {
-        this.foodType = foodType;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     public ServingSize getServingSize() {
@@ -35,6 +49,14 @@ public class FoodItem {
 
     public void setServingSize(ServingSize servingSize) {
         this.servingSize = servingSize;
+    }
+
+    public FoodType getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(FoodType foodType) {
+        this.foodType = foodType;
     }
 
     // Method to fetch calories from the API
@@ -48,6 +70,10 @@ public class FoodItem {
         // Call the API to get the carb value
         return fetchNutritionalInfo("carbs");
     }
+
+    public double getFats() {
+        return fetchNutritionalInfo("fats");
+    }
     // Method to fetch nutritional info based on type
     private double fetchNutritionalInfo(String nutrientType) {
         // Implement the API call here to get nutritional information
@@ -59,6 +85,13 @@ public class FoodItem {
         return 0.0; // Replace with actual API response
     }
 
-
-
+    @Override
+    public String toString() {
+        return "FoodItem{" +
+                ", name='" + name + '\'' +
+                ", quantity=" + quantity +
+                ", foodType=" + foodType +
+                ", servingSize=" + servingSize +
+                '}';
+    }
 }

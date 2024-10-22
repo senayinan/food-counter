@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Create Food Item</title>
+</head>
+<body>
+<h1>Create Food Item</h1>
+<form method="post" action="/foodItems/create">
+    <label for="name">Food Name:</label>
+    <input type="text" name="name" required>
+
+    <label for="foodType">Food Type:</label>
+    <select name="foodType" required>
+
+    <label for="apiId">API ID:</label>
+    <input type="text" name="apiId" required>
+
+    <label for="servingSize">Serving Size:</label>
+    <input type="text" name="servingSize" required>
+
+    <input type="submit" value="Create Food Item">
+</form>
+
+<a href="/foodItems">Back to Food Items</a>
+
+
+</body>
+</html>

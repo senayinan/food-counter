@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Food Item</title>
+</head>
+<body>
+<h1>Edit Food Item</h1>
+<form method="post" th:action="@{/foodItems/edit/${foodItem.id}}">
+    <label for="name">Food Name:</label>
+    <input type="text" name="name" th:value="${foodItem.name}" required>
+
+    <label for="foodType">Food Type:</label>
+    <input type="text" name="foodType" th:value="${foodItem.foodType.name()}" required>
+
+    <label for="apiId">API ID:</label>
+    <input type="text" name="apiId" th:value="${foodItem.apiId}" required>
+
+    <label for="servingSize">Serving Size:</label>
+    <input type="text" name="servingSize" th:value="${foodItem.servingSize.name()}" required>
+
+    <input type="submit" value="Update Food Item">
+</form>
+
+<a href="/foodItems">Back to Food Items</a>
+
+</body>
+</html>

@@ -1,16 +1,32 @@
 package com.senayinan.food_counter.models;
 
 
+import jakarta.persistence.Entity;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Meal {
+@Entity
+public class Meal extends AbstractEntity{
+    @NotNull(message = "Meal type is required")
     private MealType mealType;
+    @NotEmpty(message = "At least one food item is required")
     private List<FoodItem> foodItems;
 
-    public Meal(MealType mealType) {
+    public Meal(MealType mealType, FoodItem foodItem) {
         this.mealType = mealType;
         this.foodItems = new ArrayList<>();
+        this.foodItems.add(foodItem);
+    }
+    public Meal()   {
+        this.foodItems = new ArrayList<>();// This is normally should be empty but
+        // initializing the foodItems list in the no-argument constructor ensures that
+        // every time a Meal object is created (even if no food items are added at that moment)
+
+        // Initialize the list to prevent null references
     }
 
     public MealType getMealType() {
@@ -29,27 +45,34 @@ public class Meal {
         this.foodItems = foodItems;
     }
 
-    // Method to add a food item to the meal
-    public void addFoodItem(FoodItem foodItem)  {
-        foodItems.add(foodItem);
-    }
-    // method to remove food item
-    public void removeFoodItem(FoodItem foodItem)   {
-        foodItems.remove(foodItem);
-    }
     public double getTotalCalories()    {
         double totalCalories = 0;
         for(FoodItem foodItem : foodItems)  {
-            totalCalories += foodItem.getCalories();// Fetch calories from the API
+            totalCalories += foodItem.getCalories();
         }
         return totalCalories;
     }
     public double getTotalCarbs()   {
         double totalCarbs = 0;
         for(FoodItem foodItem : foodItems)  {
-            totalCarbs += foodItem.getCarbs();//Fetch carbs from the API
+            totalCarbs += foodItem.getCarbs();
         }
         return totalCarbs;
+    }
+    public double getTotalFat() {
+        double totalFat = 0;
+        for(FoodItem foodItem : foodItems)  {
+            totalFat += foodItem.getFats();
+        }
+        return totalFat;
+    }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                ", mealType=" + mealType +
+                ", foodItems=" + foodItems +
+                '}';
     }
 
 }

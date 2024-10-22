@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Food Items List</title>
+</head>
+<body>
+<h1>Food Items</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Food Type</th>
+        <th>API ID</th>
+        <th>Serving Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="foodItem : ${foodItems}">
+        <td th:text="${foodItem.name}"></td>
+        <td th:text="${foodItem.foodType}"></td>
+        <td th:text="${foodItem.apiId}"></td>
+        <td th:text="${foodItem.servingSize}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/foodItems/create">Create New Food Item</a>
+</body>
+</html>
