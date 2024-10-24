@@ -1,9 +1,12 @@
 package com.senayinan.food_counter.models;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 @Entity
 public class FoodItem extends AbstractEntity{
@@ -17,12 +20,19 @@ public class FoodItem extends AbstractEntity{
     private FoodType foodType;
     @NotNull(message = "Serving size is required!")
     private ServingSize servingSize;
+    private Long fdcId; // USDA Food Data Central ID
+    @ElementCollection
+    private List<Nutrient> foodItemNutrients; // List to hold nutrient data
 
-    public FoodItem(String name, double quantity, ServingSize servingSize, FoodType foodType) {
+
+    public FoodItem(String name, double quantity, ServingSize servingSize, FoodType foodType,
+                    Long fdcId) {
         this.name = name;
         this.quantity = quantity;
         this.servingSize = servingSize;
         this.foodType = foodType;
+        this.fdcId = fdcId;
+        this.foodItemNutrients = fetchNutritionalInfoFromUSDA(fdcId); // Fetch nutrients on creation
     }
 
     public FoodItem() {}
@@ -59,39 +69,73 @@ public class FoodItem extends AbstractEntity{
         this.foodType = foodType;
     }
 
-    // Method to fetch calories from the API
-    public double getCalories() {
-        return fetchNutritionalInfo("calories");
+    public Long getFdcId() {
+        return fdcId;
     }
 
-
-    // Method to fetch carbs from the API
-    public double getCarbs() {
-        // Call the API to get the carb value
-        return fetchNutritionalInfo("carbs");
+    public void setFdcId(Long fdcId) {
+        this.fdcId = fdcId;
     }
 
-    public double getFats() {
-        return fetchNutritionalInfo("fats");
+    public List<Nutrient> getFoodItemNutrients() {
+        return foodItemNutrients;
     }
-    // Method to fetch nutritional info based on type
-    private double fetchNutritionalInfo(String nutrientType) {
+
+    public void setFoodNutrients(List<Nutrient> foodItemNutrients) {
+        this.foodItemNutrients = foodItemNutrients;
+    }
+
+    // Method to fetch nutrients from USDA API based on fdcId
+    private List<Nutrient> fetchNutritionalInfoFromUSDA(Long fdcId) {
         // Implement the API call here to get nutritional information
         // This is a placeholder; you will need to implement the actual API request.
-        // For example:
-        // return APIClient.getNutritionalInfo(apiId, nutrientType);
+        // Example:
+        // return APIClient.getNutritionalInfo(fdcId);
 
-        // For now, return a dummy value (replace this with actual API logic)
-        return 0.0; // Replace with actual API response
+        // For now, return an empty list (replace this with actual API logic)
+        return List.of(); // Replace with actual API response
     }
 
     @Override
     public String toString() {
         return "FoodItem{" +
+                "fdcId=" + fdcId +
                 ", name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", foodType=" + foodType +
                 ", servingSize=" + servingSize +
+                ", foodNutrients=" + foodItemNutrients +
                 '}';
     }
+    //Nutrient class to hold nutrient data
+    public static class Nutrient    {
+        private String NutrientName;
+        private Double amount;
+
+        public String getNutrientName() {
+            return NutrientName;
+        }
+
+        public void setNutrientName(String nutrientName) {
+            NutrientName = nutrientName;
+        }
+
+        public Double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(Double amount) {
+            this.amount = amount;
+        }
+
+
+        @Override
+        public String toString() {
+            return "Nutrient{" +
+                    "NutrientName='" + NutrientName + '\'' +
+                    ", amount=" + amount +
+                    '}';
+        }
+    }
 }
+

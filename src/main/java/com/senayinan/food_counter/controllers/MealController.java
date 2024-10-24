@@ -1,7 +1,6 @@
 package com.senayinan.food_counter.controllers;
 
 import com.senayinan.food_counter.data.MealRepository;
-import com.senayinan.food_counter.models.FoodItem;
 import com.senayinan.food_counter.models.Meal;
 import com.senayinan.food_counter.models.MealType;
 import jakarta.validation.Valid;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 

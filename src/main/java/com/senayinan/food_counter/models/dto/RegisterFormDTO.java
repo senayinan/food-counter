@@ -1,2 +1,14 @@
-package com.senayinan.food_counter.models.dto;public class RegisterFormDTO {
+package com.senayinan.food_counter.models.dto;
+
+public class RegisterFormDTO extends LoginFormDTO{
+    private String verifyPassword;
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
+
 }
