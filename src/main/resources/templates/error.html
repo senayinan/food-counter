@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <title>Error Page</title>
+</head>
+<body>
+
+    <!-- Error Content -->
+    <div class="container mt-4">
+        <h2>Something went wrong!</h2>
+        <p>Sorry, an unexpected error occurred. Please try again later.</p>
+    </div>
+
+    <!-- Button under content -->
+    <div class="container d-flex justify-content mt-4">
+        <button onclick="window.location.href='/'" class="btn btn-primary">
+            Back to Home
+        </button>
+    </div>
+
+
+
+</body>
+</html>

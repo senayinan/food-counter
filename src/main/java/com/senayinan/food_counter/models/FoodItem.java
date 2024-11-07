@@ -1,11 +1,15 @@
 package com.senayinan.food_counter.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +19,7 @@ public class FoodItem extends AbstractEntity{
     @NotBlank(message = "Name is required!")
     private String name;
     @NotNull(message = "Quantity is required!")
+    @Min(value = 0, message = "Quantity must be non-negative")
     private double quantity;
     @NotNull(message = "Food type is required!")
     private FoodType foodType;
@@ -22,7 +27,7 @@ public class FoodItem extends AbstractEntity{
     private ServingSize servingSize;
     private Long fdcId; // USDA Food Data Central ID
     @ElementCollection
-    private List<Nutrient> foodItemNutrients; // List to hold nutrient data
+    private List<Nutrient> foodItemNutrients = new ArrayList<>(); // List to hold nutrient data
 
 
     public FoodItem(String name, double quantity, ServingSize servingSize, FoodType foodType,
@@ -32,7 +37,6 @@ public class FoodItem extends AbstractEntity{
         this.servingSize = servingSize;
         this.foodType = foodType;
         this.fdcId = fdcId;
-        this.foodItemNutrients = fetchNutritionalInfoFromUSDA(fdcId); // Fetch nutrients on creation
     }
 
     public FoodItem() {}
@@ -80,20 +84,16 @@ public class FoodItem extends AbstractEntity{
     public List<Nutrient> getFoodItemNutrients() {
         return foodItemNutrients;
     }
-
-    public void setFoodNutrients(List<Nutrient> foodItemNutrients) {
+    public void setFoodItemNutrients(List<Nutrient> foodItemNutrients) {
         this.foodItemNutrients = foodItemNutrients;
     }
 
-    // Method to fetch nutrients from USDA API based on fdcId
-    private List<Nutrient> fetchNutritionalInfoFromUSDA(Long fdcId) {
-        // Implement the API call here to get nutritional information
-        // This is a placeholder; you will need to implement the actual API request.
-        // Example:
-        // return APIClient.getNutritionalInfo(fdcId);
+    public void addNutrient(Nutrient nutrient) {
+        this.foodItemNutrients.add(nutrient);
+    }
 
-        // For now, return an empty list (replace this with actual API logic)
-        return List.of(); // Replace with actual API response
+    public void removeNutrient(Nutrient nutrient) {
+        this.foodItemNutrients.remove(nutrient); // Remove the nutrient from the list
     }
 
     @Override
@@ -107,35 +107,6 @@ public class FoodItem extends AbstractEntity{
                 ", foodNutrients=" + foodItemNutrients +
                 '}';
     }
-    //Nutrient class to hold nutrient data
-    public static class Nutrient    {
-        private String NutrientName;
-        private Double amount;
 
-        public String getNutrientName() {
-            return NutrientName;
-        }
-
-        public void setNutrientName(String nutrientName) {
-            NutrientName = nutrientName;
-        }
-
-        public Double getAmount() {
-            return amount;
-        }
-
-        public void setAmount(Double amount) {
-            this.amount = amount;
-        }
-
-
-        @Override
-        public String toString() {
-            return "Nutrient{" +
-                    "NutrientName='" + NutrientName + '\'' +
-                    ", amount=" + amount +
-                    '}';
-        }
-    }
 }
 

@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head th:replace="fragments :: head"></head>
-<body class="container">
-<h1>Food Counter</h1>
-<header th:replace="fragments :: header"></header>
+<head th:replace="fragments :: head">
+    <title>Welcome to My Food Counter App</title>
+</head>
+<body>
+
+    <!-- Header -->
+    <header th:replace="fragments :: header"></header>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+    <h2>Welcome to My Food Counter App!</h2>
+    <p>Track your meals, food items, and nutrients easily.</p>
+
+    <!-- Add any additional content you want to display on the homepage here -->
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="fragments :: footer"></footer>
 
 </body>
 </html>

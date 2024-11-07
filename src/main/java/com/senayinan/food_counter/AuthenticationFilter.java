@@ -7,19 +7,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
+@Component
 public class AuthenticationFilter implements HandlerInterceptor {
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     AuthenticationController authenticationController;
-    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css");
+
+
+    // List of whitelisted paths that don't require authentication
+    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css", "/js");
+
+    // Helper method to check if the requested path is whitelisted
     private static boolean isWhitelisted(String path) {
         for (String pathRoot : whitelist) {
             if (path.startsWith(pathRoot)) {
@@ -40,7 +46,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
             return true;
         }
 
-
+        // Check the user's session
         HttpSession session = request.getSession();
         User user = authenticationController.getUserFromSession(session);
 
@@ -49,7 +55,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
             return true;
         }
 
-        // The user is NOT logged in
+        // The user is NOT logged in, redirect to login page
         response.sendRedirect("/login");
         return false;
     }

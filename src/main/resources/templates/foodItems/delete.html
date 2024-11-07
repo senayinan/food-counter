@@ -1,37 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Food Items List</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
 <body>
-<h1>Food Items</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Food Type</th>
-        <th>API ID</th>
-        <th>Serving Size</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="foodItem, stat : ${foodItems}">
-        <td th:text="${foodItem.name}"></td>
-        <td th:text="${foodItem.foodType}"></td>
-        <td th:text="${foodItem.apiId}"></td>
-        <td th:text="${foodItem.servingSize}"></td>
-        <td>
-            <!-- Delete form -->
-            <form method="post" th:action="@{'/foodItems/delete/' + ${stat.index}}">
-                <input type="submit" value="Delete">
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<a href="/foodItems/create">Create New Food Item</a>
+    <div th:replace="fragments :: header"></div>
 
+    <div class="container mt-5">
+        <h2 th:text="${title}">Delete Food Items</h2>
+        <form action="#" th:action="@{/foodItems/delete}" method="post">
+            <div class="mb-3">
+                <h5>Select Food Items to Delete:</h5>
+                <div th:each="foodItem : ${foodItems}">
+                    <div>
+                        <input type="checkbox" th:value="${foodItem.id}" name="foodItemIds" id="foodItemId" />
+                        <label th:for="${foodItem.id}" th:text="${foodItem.name}"></label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger">Delete Selected</button>
+        </form>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
 </body>
 </html>

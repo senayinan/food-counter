@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <title>Terms of Service</title>
+</head>
+<body>
+
+
+    <!-- Terms of Service Content -->
+    <div th:replace="fragments :: terms-of-service"></div>
+
+
+    <!-- Button under content -->
+    <div class="container d-flex justify-content mt-4">
+        <button onclick="window.location.href='/'" class="btn btn-primary">
+            Back to Home
+        </button>
+    </div>
+
+</body>
+</html>

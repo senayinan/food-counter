@@ -1,26 +1,46 @@
 package com.senayinan.food_counter.models;
 
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Meal extends AbstractEntity{
+
     @NotNull(message = "Meal type is required")
     private MealType mealType;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @NotEmpty(message = "At least one food item is required")
     private List<FoodItem> foodItems;
 
+    // Add the Day reference for the many-to-one relationship
+    @ManyToOne
+    @JoinColumn(name = "day_id") // Ensure this matches your database schema
+    private Day day;
+
+
+
+    // Constructor for single food item
     public Meal(MealType mealType, FoodItem foodItem) {
         this.mealType = mealType;
         this.foodItems = new ArrayList<>();
         this.foodItems.add(foodItem);
     }
+
+    // Constructor for multiple food items
+    public Meal(MealType mealType, List<FoodItem> foodItems) {
+        this.mealType = mealType;
+        this.foodItems = foodItems;
+    }
+
+
     public Meal()   {
         this.foodItems = new ArrayList<>();// This is normally should be empty but
         // initializing the foodItems list in the no-argument constructor ensures that
@@ -43,28 +63,6 @@ public class Meal extends AbstractEntity{
 
     public void setFoodItems(List<FoodItem> foodItems) {
         this.foodItems = foodItems;
-    }
-
-    public double getTotalCalories()    {
-        double totalCalories = 0;
-        for(FoodItem foodItem : foodItems)  {
-            totalCalories += foodItem.getCalories();
-        }
-        return totalCalories;
-    }
-    public double getTotalCarbs()   {
-        double totalCarbs = 0;
-        for(FoodItem foodItem : foodItems)  {
-            totalCarbs += foodItem.getCarbs();
-        }
-        return totalCarbs;
-    }
-    public double getTotalFat() {
-        double totalFat = 0;
-        for(FoodItem foodItem : foodItems)  {
-            totalFat += foodItem.getFats();
-        }
-        return totalFat;
     }
 
     @Override

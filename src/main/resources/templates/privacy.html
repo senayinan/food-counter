@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head">
+    <title>Privacy Policy</title>
+</head>
+<body>
+
+    <!-- Privacy Policy Content -->
+    <div th:replace="fragments :: privacy-policy"></div>
+
+
+    <!-- Button under content -->
+    <div class="container d-flex justify-content mt-4">
+        <button onclick="window.location.href='/'" class="btn btn-primary">
+            Back to Home
+        </button>
+    </div>
+
+</body>

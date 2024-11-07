@@ -13,24 +13,25 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("foodItems")
+@RequestMapping("/foodItems")
 public class FoodItemController {
     @Value("${usda.api.key}")// Inject the USDA API key from configuration
     private String apiKey;
     @Autowired
     private FoodItemRepository foodItemRepository;
+
     @GetMapping
-    public String displayAllFoodItems(Model model)  {
+    public String displayAllFoodItems(Model model) {
         model.addAttribute("title", "All Food Items");
         model.addAttribute("foodItems", foodItemRepository.findAll());
         return "foodItems/index";
     }
-    @GetMapping("create")
-    public String renderCreateFoodItemForm(Model model)    {
+
+    @GetMapping("/create")
+    public String renderCreateFoodItemForm(Model model) {
         model.addAttribute("title", "Create Food Item");
         model.addAttribute("foodItem", new FoodItem());
         model.addAttribute("foodTypes", FoodType.values());
@@ -38,37 +39,38 @@ public class FoodItemController {
         return "foodItems/create";
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public String processCreateFoodItem(@ModelAttribute @Valid FoodItem newFoodItem,
-                                        Errors errors, Model model)   {
-        if(errors.hasErrors())  {
+                                        Errors errors, Model model) {
+        if (errors.hasErrors()) {
             model.addAttribute("title", "Create Food Item");
             model.addAttribute("foodTypes", FoodType.values());
             model.addAttribute("servingSizes", ServingSize.values());
-            return  "foodItems/create";
+            return "foodItems/create";
         }
         // Fetch nutrient data from USDA API using fdcId before saving
-        List<FoodItem.Nutrient> nutrients = fetchNutritionalInfoFromUSDA(newFoodItem.getFdcId());
-        newFoodItem.setFoodNutrients(nutrients);
+        List<Nutrient> nutrients = fetchNutritionalInfoFromUSDA(newFoodItem.getFdcId());
+
+        newFoodItem.setFoodItemNutrients(nutrients);
         foodItemRepository.save(newFoodItem);
-        return  "redirect:/foodItems";
+        return "redirect:/foodItems";
     }
 
-    @GetMapping("delete")
-    public String displayDeleteFoodItemForm(Model model)    {
+    @GetMapping("/delete")
+    public String displayDeleteFoodItemForm(Model model) {
         model.addAttribute("title", "Delete Food Items");
         model.addAttribute("foodItems", foodItemRepository.findAll());
         return "foodItems/delete";
     }
 
-    @PostMapping("delete")
-    public String processDeleteFoodItemForm(@RequestParam(required = false) int[] foodItemIds)  {
-        if(foodItemIds != null) {
-            for(int foodItemId : foodItemIds)   {
+    @PostMapping("/delete")
+    public String processDeleteFoodItemForm(@RequestParam(required = false) int[] foodItemIds) {
+        if (foodItemIds != null) {
+            for (int foodItemId : foodItemIds) {
                 foodItemRepository.deleteById(foodItemId);
             }
         }
-        return  "redirect:/foodItemId";
+        return "redirect:/foodItemId";
     }
 
 
@@ -87,14 +89,15 @@ public class FoodItemController {
             return "foodItems/error";//I'll need error.html template in foodItems
         }
     }
-    @PostMapping("edit")
+
+    @PostMapping("/edit/{foodItemId}")
     public String processEditFoodItemForm(@PathVariable int foodItemId, @ModelAttribute @Valid FoodItem foodItem,
                                           Errors errors, Model model) {
-        if(errors.hasErrors())  {
+        if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Food Item");
             model.addAttribute("foodTypes", FoodType.values());
             model.addAttribute("servingSizes", ServingSize.values());
-            return  "foodItems/edit";
+            return "foodItems/edit";
         }
         Optional<FoodItem> optionalFoodItem = foodItemRepository.findById(foodItemId);
         if (optionalFoodItem.isPresent()) {
@@ -108,8 +111,8 @@ public class FoodItemController {
             // Re-fetch nutrient data if fdcId has changed
             if (!foodItemToEdit.getFdcId().equals(foodItem.getFdcId())) {
                 foodItemToEdit.setFdcId(foodItem.getFdcId());
-                List<FoodItem.Nutrient> nutrients = fetchNutritionalInfoFromUSDA(foodItem.getFdcId());
-                foodItemToEdit.setFoodNutrients(nutrients);
+                List<Nutrient> nutrients = fetchNutritionalInfoFromUSDA(foodItem.getFdcId());
+                foodItemToEdit.setFoodItemNutrients(nutrients);
             }
 
             foodItemRepository.save(foodItemToEdit);
@@ -117,53 +120,43 @@ public class FoodItemController {
         return "redirect:/foodItems";
     }
 
-    @GetMapping("view/{foodItemId}")
-    public String viewFoodItem(Model model, @PathVariable int foodItemId)   {
+    @GetMapping("/view/{foodItemId}")
+    public String viewFoodItem(Model model, @PathVariable int foodItemId) {
         Optional<FoodItem> optionalFoodItem = foodItemRepository.findById(foodItemId);
-        if(optionalFoodItem.isPresent())    {
+        if (optionalFoodItem.isPresent()) {
             FoodItem foodItem = optionalFoodItem.get();
-
-            // Collect nutrient information using a List
-            List<String> nutrientInfoList = new ArrayList<>();
-            for (FoodItem.Nutrient nutrient : foodItem.getFoodItemNutrients()) {
-                nutrientInfoList.add(nutrient.getNutrientName() + ": " + nutrient.getAmount());
-            }
-            // Join the list into a single string with <br> for line breaks
-            String nutrientInfo = String.join("<br>", nutrientInfoList);
-
             model.addAttribute("foodItem", foodItem);
-            model.addAttribute("nutrientInfo", nutrientInfo); // Add nutrient info to the model
-
-
-            return  "foodItems/view";
-        }   else {
-            return  "redirect:/error";
+            return "foodItems/view";
+        } else {
+            return "redirect:/error";
         }
     }
 
 
-    private List<FoodItem.Nutrient> fetchNutritionalInfoFromUSDA(Long fdcId) {
+    private List<Nutrient> fetchNutritionalInfoFromUSDA(Long fdcId) {
         try {
             String apiUrl = "https://api.nal.usda.gov/fdc/v1/food/" + fdcId + "?api_key=" + apiKey;
             RestTemplate restTemplate = new RestTemplate();
 
-            Map<String, Object> response = restTemplate.getForObject(apiUrl, Map.class);
+            USDAFoodItemResponse response = restTemplate.getForObject(apiUrl, USDAFoodItemResponse.class);
+            List<Nutrient> nutrientList = new ArrayList<>();
 
-            List<Map<String, Object>> nutrients = (List<Map<String, Object>>) response.get("foodNutrients");
+            if (response != null && response.getFoodNutrients() != null) {
+                for (USDAFoodNutrient usdaFoodNutrient : response.getFoodNutrients()) {
+                    Nutrient nutrient = new Nutrient();
+                    nutrient.setNutrientName(usdaFoodNutrient.getNutrientName());
+                    nutrient.setAmount(usdaFoodNutrient.getValue());
+                    nutrientList.add(nutrient);
+                }
+            }
 
-            return nutrients.stream()
-                    .map(nutrientData -> {
-                        String nutrientName = (String) nutrientData.get("nutrientName");
-                        Double amount = (Double) nutrientData.get("value");
-                        FoodItem.Nutrient nutrient = new FoodItem.Nutrient();
-                        nutrient.setNutrientName(nutrientName);
-                        nutrient.setAmount(amount);
-                        return nutrient;
-                    })
-                    .toList();
+
+            return nutrientList;
         } catch (Exception e) {
             e.printStackTrace();
-            return List.of(); // Return an empty list in case of an error
+            return new ArrayList<>(); // Return an empty list in case of an error
         }
     }
 }
+
+

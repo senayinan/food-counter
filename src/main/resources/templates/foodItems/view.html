@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title></title>
-</head>
+<head th:fragment="head" th:replace="fragments :: head"></head>
 <body>
+<nav th:replace="fragments :: header"></nav>
 
+    <div class="container my-4">
+        <h2 th:text="${foodItem.name}">Food Item</h2>
+        <p><strong>FDC ID:</strong> <span th:text="${foodItem.fdcId}"></span></p>
+        <p><strong>Quantity:</strong> <span th:text="${foodItem.quantity}"></span></p>
+        <p><strong>Food Type:</strong> <span th:text="${foodItem.foodType}"></span></p>
+        <p><strong>Serving Size:</strong> <span th:text="${foodItem.servingSize}"></span></p>
+
+        <h4>Nutrients:</h4>
+        <ul class="list-group">
+            <li class="list-group-item" th:each="nutrient : ${foodItem.foodItemNutrients}"
+                th:text="${nutrient.nutrientName + ': ' + nutrient.amount}">
+            </li>
+        </ul>
+
+        <div class="mt-4">
+            <a href="/foodItems" class="btn btn-secondary">Back to Food Items</a>
+            <a th:href="@{'/foodItems/edit/' + ${foodItem.id}}" class="btn btn-primary">Edit Food Item</a>
+        </div>
+    </div>
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

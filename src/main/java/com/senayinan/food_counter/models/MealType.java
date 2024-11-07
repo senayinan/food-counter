@@ -17,4 +17,9 @@ public enum MealType {
     public String getMealType() {
         return mealType;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

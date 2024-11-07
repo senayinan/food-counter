@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -32,10 +33,12 @@ public class MealController {
         model.addAttribute("mealTypes", MealType.values());
 
         return "meals/create";
+
     }
 
     @PostMapping("create")
     public String processCreateMealForm(@ModelAttribute @Valid Meal newMeal,
+                                        @RequestParam("mealType") MealType mealType,
                                         Errors errors, Model model) {
         if(errors.hasErrors()) {
             model.addAttribute("title", "Create Meal");

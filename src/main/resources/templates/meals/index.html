@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Meals</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments/fragment :: content">
-    <div th:fragment="content">
-        <h2>Meal List</h2>
-        <table>
+    <header th:replace="fragments :: header"></header>
+    <div class="container">
+        <h2 th:text="${title}">All Meals</h2>
+        <a href="/meals/create" class="btn btn-primary mb-3">Create New Meal</a>
+        <table class="table table-bordered">
+            <thead>
             <tr>
-                <th>ID</th>
                 <th>Meal Type</th>
-                <th>
-
-
-
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="meal : ${meals}">
+                <td th:text="${meal.mealType}">Meal Type</td>
+                <td>
+                    <a th:href="@{'/meals/view/' + ${meal.id}}" class="btn btn-info">View</a>
+                    <a th:href="@{'/meals/edit/' + ${meal.id}}" class="btn btn-warning">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>
-
-
-
-
 
