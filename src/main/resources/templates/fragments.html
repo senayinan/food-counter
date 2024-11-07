@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:fragment="head">
     <meta charset="UTF-8"/>
-    <title>My Food Counter App</title>
+    <title>Food Counter App</title>
 
 
     <!-- Bootstrap CSS -->
@@ -12,31 +12,44 @@
 </head>
 <body>
 
-
 <!-- Header Fragment -->
 <nav th:fragment="header" class="container mt-4">
     <h1 th:text="${title}">Food Counter</h1>
     <ul class="nav">
-
-
         <!-- Home Link (always visible) -->
-        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item" th:if="${currentPage != 'index'}">
+            <a class="nav-link" th:href="@{/}">Home</a>
+        </li>
 
 
         <!-- Display Login and Register links only when the user is not logged in -->
-        <li th:if="${not loggedIn}" class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-        <li th:if="${not loggedIn}" class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+        <li th:if="${not loggedIn}" class="nav-item">
+            <a class="nav-link" th:href="@{/login}">Login</a>
+        </li>
 
+
+        <li th:if="${not loggedIn}" class="nav-item">
+            <a class="nav-link" th:href="@{/register}">Register</a>
+        </li>
 
 
         <!-- Display other links only when the user is logged in -->
-        <li th:if="${loggedIn}" class="nav-item"><a class="nav-link" href="/meals">All Meals</a></li>
-        <li th:if="${loggedIn}" class="nav-item"><a class="nav-link" href="/foods">All Foods</a></li>
-        <li th:if="${loggedIn}" class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <li th:if="${loggedIn}" class="nav-item">
+            <a class="nav-link" th:href="@{/meals}">All Meals</a>
+        </li>
+
+
+        <li th:if="${loggedIn}" class="nav-item">
+            <a class="nav-link" th:href="@{/foods}">All Foods</a>
+        </li>
+
+
+        <li th:if="${loggedIn}" class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </li>
 
     </ul>
 </nav>
-
 
 <!-- About Fragment -->
 <div th:fragment="about" class="container mt-4">

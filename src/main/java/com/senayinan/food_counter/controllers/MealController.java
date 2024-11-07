@@ -21,6 +21,7 @@ public class MealController {
     private MealRepository mealRepository;
     @GetMapping
     public String displayAllMeals(Model model) {
+
         model.addAttribute("title", "All Meals");
         model.addAttribute("meals", mealRepository.findAll());
         return "meals/index";

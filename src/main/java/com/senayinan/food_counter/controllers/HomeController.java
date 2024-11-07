@@ -25,7 +25,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Model model)   {
-
+        model.addAttribute("currentPage", "index");
         model.addAttribute("message", "Welcome to the Home Page!");
         return "index";
     }
