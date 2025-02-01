@@ -2,29 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 <body>
-    <header th:replace="fragments :: header"></header>
-    <div class="container">
-        <h2 th:text="${title}">All Meals</h2>
-        <a href="/meals/create" class="btn btn-primary mb-3">Create New Meal</a>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Meal Type</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="meal : ${meals}">
-                <td th:text="${meal.mealType}">Meal Type</td>
-                <td>
-                    <a th:href="@{'/meals/view/' + ${meal.id}}" class="btn btn-info">View</a>
-                    <a th:href="@{'/meals/edit/' + ${meal.id}}" class="btn btn-warning">Edit</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<nav th:replace="fragments :: header"></nav>
+
+<div class="container mt-4">
+    <h2 th:text="${title}">All Meals</h2>
+
+    <!-- Display a message if no meals are available -->
+    <p th:if="${#lists.isEmpty(meals)}">No meals available.</p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Meal Type</th>
+            <th>Date</th>
+            <th>Food Items</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through meals and display each meal's details -->
+        <tr th:each="meal : ${meals}">
+            <td th:text="${meal.mealType}">Meal Type</td>
+            <td th:text="${meal.date}">Date</td>
+            <td>
+
+                <ul th:if="${#lists.isEmpty(meal.foodItems)}">
+                    <li>No food items</li>
+                </ul>
+                <ul th:unless="${#lists.isEmpty(meal.foodItems)}">
+                    <li th:each="foodItem : ${meal.foodItems}" th:text="${foodItem.name}">Food Item</li>
+                </ul>
+            </td>
+            <td>
+
+                <a th:href="@{/meals/view/{id}(id=${meal.id})}" class="btn btn-primary btn-sm">View</a>
+                <a th:href="@{/meals/edit/{id}(id=${meal.id})}" class="btn btn-secondary btn-sm">Edit</a>
+                <a th:href="@{/meals/delete/{id}(id=${meal.id})}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <footer th:replace="fragments :: footer"></footer>
 </body>
 </html>
-

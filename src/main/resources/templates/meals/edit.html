@@ -2,20 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 <body>
-    <header th:replace="fragments :: header"></header>
-    <div class="container">
-        <h2 th:text="${title}">Edit Meal</h2>
-        <form th:action="@{/meals/edit/{mealId}(mealId=${meal.id})}" th:object="${meal}" method="post">
-            <div class="form-group">
-                <label for="mealType">Meal Type</label>
-                <select th:field="*{mealType}" class="form-control" required>
-                    <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="/meals" class="btn btn-secondary">Cancel</a>
-        </form>
-    </div>
+<nav th:replace="fragments :: header"></nav>
+
+<div class="container mt-4">
+    <h2 th:text="${title}"></h2>
+    <form th:action="@{/meals/edit/{mealId}(mealId=${meal.id})}" th:object="${meal}" method="post">
+        <div class="mb-3">
+            <label for="mealType" class="form-label">Meal Type</label>
+            <select id="mealType" class="form-select" th:field="*{mealType}">
+                <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
+            </select>
+        </div>
+        <!-- Add other fields for editing Meal as necessary -->
+        <button type="submit" class="btn btn-primary">Update Meal</button>
+    </form>
+</div>
+
 <footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

@@ -23,7 +23,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
 
 
     // List of whitelisted paths that don't require authentication
-    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css", "/js");
+    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css", "/js", "/home");
 
     // Helper method to check if the requested path is whitelisted
     private static boolean isWhitelisted(String path) {
@@ -35,22 +35,39 @@ public class AuthenticationFilter implements HandlerInterceptor {
         return false;
     }
 
+
+   /* private static final List<String> blacklist = Arrays.asList("/meals/edit", "/meals/create",
+            "/meals/delete", "/foodItem/edit", "/foodItem/create", "/foodItem/delete");
+    private static boolean isBlacklisted(String path) {
+        for (String pathRoot : blacklist) {
+            if (path.startsWith(pathRoot)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    */
+
+
+
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws IOException {
 
-        // Don't require sign-in for whitelisted pages
+        // Allow access to whitelisted paths without authentication
         if (isWhitelisted(request.getRequestURI())) {
-            // returning true indicates that the request may proceed
             return true;
         }
+
+
 
         // Check the user's session
         HttpSession session = request.getSession();
         User user = authenticationController.getUserFromSession(session);
 
-        // The user is logged in
+        // The user is logged in, allow access
         if (user != null) {
             return true;
         }

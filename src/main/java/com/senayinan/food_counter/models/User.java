@@ -18,18 +18,14 @@ public class User extends AbstractEntity{
     private String email;
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Day>days = new ArrayList<>();
-
     public User(String userName, String password) {
         this.userName = userName;
         this.pwHash = encoder.encode(password);
     }
 
-    public User(String userName, String password, String email, List<Day> days) {
+    public User(String userName, String password, String email) {
         this.userName = userName;
         this.pwHash = encoder.encode(password);
-        this.days = days;
     }
 
     public User() {}
@@ -53,15 +49,6 @@ public class User extends AbstractEntity{
         this.email = email;
     }
 
-
-    public List<Day> getDays() {
-        return days;
-    }
-
-    public void setDays(List<Day> days) {
-        this.days = days;
-    }
-
     public boolean isMatchingPassword(String password) {
 
 
@@ -73,7 +60,7 @@ public class User extends AbstractEntity{
     public String toString() {
         return "User{" +
                 ", userName='" + userName + '\'' +
-                ", days=" + days +
+                ", days=" +
                 '}';
     }
 

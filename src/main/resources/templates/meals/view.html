@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title></title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
 <body>
+<nav th:replace="fragments :: header"></nav>
 
+<div class="container mt-4">
+    <h2 th:text="${title}"></h2>
+    <div>
+        <p><strong>Meal Type:</strong> <span th:text="${meal.mealType}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${meal.date}"></span></p>
+        <h3>Food Items</h3>
+        <ul>
+            <li th:each="foodItem : ${meal.foodItems}" th:text="${foodItem.name}"></li>
+        </ul>
+    </div>
+</div>
+
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

@@ -30,6 +30,11 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-Xlint:unchecked"
+}
+
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

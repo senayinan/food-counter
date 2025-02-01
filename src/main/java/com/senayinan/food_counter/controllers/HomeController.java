@@ -13,16 +13,6 @@ public class HomeController {
     @Autowired
     AuthenticationController authenticationController;
 
-    // This method will run for all requests handled by HomeController
-
-    // Add loggedIn globally to all views
-    @ModelAttribute("loggedIn")
-    public boolean isLoggedIn(HttpSession session) {
-        User user = authenticationController.getUserFromSession(session);
-        return user != null;
-    }
-
-
     @GetMapping("/")
     public String index(Model model)   {
         model.addAttribute("currentPage", "index");

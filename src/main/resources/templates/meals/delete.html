@@ -1,19 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Delete Meal</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
 <body>
-<h1>Delete Meal</h1>
-<p>Are you sure you want to delete the meal: <strong th:text="${meal.mealType}"></strong>?</p>
-<form method="post" th:action="@{/meals/delete/{id}(id=${meal.id})}">
-    <div>
-        <input type="submit" value="Yes, Delete">
-    </div>
-</form>
+<nav th:replace="fragments :: header"></nav>
 
-<a th:href="@{/meals}">Cancel</a>
+<div class="container mt-4">
+    <h2>Delete Meals</h2>
+    <form th:action="@{/meals/delete}" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Select</th>
+                <th>Meal Type</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="meal : ${meals}">
+                <td><input type="checkbox" th:name="mealIds" th:value="${meal.id}" /></td>
+                <td th:text="${meal.mealType}"></td>
+                <td th:text="${meal.date}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger">Delete Selected</button>
+    </form>
+</div>
 
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>

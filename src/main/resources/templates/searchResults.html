@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<div class="container mt-4">
+    <h2>Search Results for: <span th:text="${query}"></span></h2>
+
+    <div th:if="${#lists.isEmpty(results)}">
+        <p>No results found.</p>
+    </div>
+
+    <div th:each="foodItem : ${results}">
+        <div class="food-item">
+            <h3 th:text="${foodItem.name}"></h3>
+            <p>Type: <span th:text="${foodItem.foodType}"></span></p>
+            <p>Serving Size: <span th:text="${foodItem.servingSize}"></span></p>
+            <a th:href="@{'/foodItems/' + ${foodItem.id}}">View Details</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

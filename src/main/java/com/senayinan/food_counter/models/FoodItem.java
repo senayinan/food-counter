@@ -1,9 +1,6 @@
 package com.senayinan.food_counter.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,16 +15,28 @@ public class FoodItem extends AbstractEntity{
     @Size(min=3, max=50, message = "Name must be between 3 and 50 characters!")
     @NotBlank(message = "Name is required!")
     private String name;
+
     @NotNull(message = "Quantity is required!")
     @Min(value = 0, message = "Quantity must be non-negative")
     private double quantity;
+
     @NotNull(message = "Food type is required!")
+    @Enumerated(EnumType.STRING)
     private FoodType foodType;
+
     @NotNull(message = "Serving size is required!")
+    @Enumerated(EnumType.STRING)
     private ServingSize servingSize;
-    private Long fdcId; // USDA Food Data Central ID
     @ElementCollection
     private List<Nutrient> foodItemNutrients = new ArrayList<>(); // List to hold nutrient data
+
+    private Long fdcId; // USDA Food Data Central ID
+
+
+    //to reference meal
+    @ManyToOne
+    @JoinColumn(name = "meal_id") // Foreign key column in FoodItem table
+    private Meal meal;
 
 
     public FoodItem(String name, double quantity, ServingSize servingSize, FoodType foodType,
@@ -79,6 +88,14 @@ public class FoodItem extends AbstractEntity{
 
     public void setFdcId(Long fdcId) {
         this.fdcId = fdcId;
+    }
+
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
     }
 
     public List<Nutrient> getFoodItemNutrients() {

@@ -8,18 +8,20 @@ public enum MealType {
     SNACK2("Snack2"),
     SNACK3("Snack3"),
     NONE("None");
-    private final String mealType;
 
-    MealType(String mealType) {
-        this.mealType = mealType;
+    private final String displayName;
+
+    MealType(String displayName)    {
+    this.displayName = displayName;
     }
 
-    public String getMealType() {
-        return mealType;
+    public String getDisplayMealName()  {
+        return displayName;
     }
 
     @Override
     public String toString() {
-        return name();
+        return displayName;
     }
 }
+

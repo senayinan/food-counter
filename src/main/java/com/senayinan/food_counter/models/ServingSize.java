@@ -8,19 +8,18 @@ public enum ServingSize {
     TABLESPOON("Tablespoon"),
     TEASPOON("Teaspoon");
 
-    private final String unit;
+    private final String displayName;
 
-    ServingSize(String unit) {
-
-        this.unit = unit;
+    ServingSize(String displayName) {
+        this.displayName = displayName;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getDisplayName() {
+        return displayName;
     }
 
     @Override
     public String toString() {
-        return unit;
+        return displayName;
     }
 }
